@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  createdBooks Book[]        @relation("BookCreatedBy")
+  loans        Loan[]
+  reservations Reservation[]
+  auditLogs    AuditLog[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model Book {
+  id              Int    @id @default(autoincrement())
+  title           String
+  author          String
+  publicationYear Int
+  status          String @default("AVAILABLE")
+  imageUrl        String?
+
+  createdById Int?
+  createdBy   User? @relation("BookCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  loans        Loan[]
+  reservations Reservation[]
+
+  @@index([title])
+  @@index([author])
+  @@index([status])
+  @@index([publicationYear])
+  @@map("books")
+}
+
+model Loan {
+  id         Int       @id @default(autoincrement())
+  bookId     Int
+  userId     Int
+  loanDate   DateTime  @default(now())
+  dueDate    DateTime?
+  returnedAt DateTime?
+  status     String    @default("ACTIVE")
+  notes      String?
+
+  book Book @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookId, status])
+  @@index([userId, status])
+  @@index([loanDate])
+  @@map("loans")
+}
+
+model Reservation {
+  id          Int       @id @default(autoincrement())
+  bookId      Int
+  userId      Int
+  reservedAt  DateTime  @default(now())
+  expiresAt   DateTime?
+  fulfilledAt DateTime?
+  cancelledAt DateTime?
+  status      String    @default("ACTIVE")
+  notes       String?
+
+  book Book @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookId, status])
+  @@index([userId, status])
+  @@index([reservedAt])
+  @@map("reservations")
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  entityName  String
+  entityId    Int?
+  action      String
+  description String?
+  beforeData  String?
+  afterData   String?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([userId, createdAt])
+  @@index([entityName, entityId])
+  @@index([action, createdAt])
+  @@map("audit_logs")
+}
