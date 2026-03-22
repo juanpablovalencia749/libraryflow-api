@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateBookDto } from './dto/create-book.dto.js';
 import { UpdateBookDto } from './dto/update-book.dto.js';
@@ -149,8 +149,32 @@ export class BooksService {
     };
   }
 
+  // async update(id: number, updateBookDto: UpdateBookDto) {
+  //   await this.findOne(id, 0);
+  //   return this.prisma.book.update({
+  //     where: { id },
+  //     data: updateBookDto,
+  //   });
+  // }
   async update(id: number, updateBookDto: UpdateBookDto) {
-    await this.findOne(id, 0);
+    const book = await this.prisma.book.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        status: true,
+      },
+    });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    if (updateBookDto.status === 'LOANED') {
+      throw new BadRequestException(
+        'Book status LOANED is managed by the loan flow, not by manual update',
+      );
+    }
+
     return this.prisma.book.update({
       where: { id },
       data: updateBookDto,
@@ -158,7 +182,26 @@ export class BooksService {
   }
 
   async remove(id: number) {
-    await this.findOne(id, 0);
+    const book = await this.prisma.book.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    const [loanCount, reservationCount] = await Promise.all([
+      this.prisma.loan.count({ where: { bookId: id } }),
+      this.prisma.reservation.count({ where: { bookId: id } }),
+    ]);
+
+    if (loanCount > 0 || reservationCount > 0) {
+      throw new BadRequestException(
+        'Cannot delete the book because it has loans or reservations',
+      );
+    }
+
     return this.prisma.book.delete({ where: { id } });
   }
 }

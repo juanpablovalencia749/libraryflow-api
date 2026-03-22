@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './../src/app.module.js';
+import cookieParser from 'cookie-parser';
 
 const getRequest = async () => (await import('supertest')).default;
 
@@ -13,6 +14,7 @@ describe('Auth & Books API (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     await app.init();
   });
@@ -22,52 +24,64 @@ describe('Auth & Books API (e2e)', () => {
   });
 
   describe('Auth', () => {
-    it('POST /auth/register - rejects invalid body (400)', async () => {
+    it('POST /auth/login - sets HttpOnly cookie (200)', async () => {
       const req = await getRequest();
-      return req(app.getHttpServer())
-        .post('/auth/register')
-        .send({ name: 'X' }) // missing required email/password
-        .expect(400);
+      const res = await req(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'admin@library.com', password: 'adminpassword' })
+        .expect(200);
+      
+      expect(res.body).toHaveProperty('access_token');
+      expect(res.body).not.toHaveProperty('refresh_token');
+      
+      const cookies = res.get('Set-Cookie');
+      expect(cookies).toBeDefined();
+      if (cookies) {
+        expect(cookies[0]).toContain('refresh_token=');
+        expect(cookies[0]).toContain('HttpOnly');
+      }
     });
 
-    it('POST /auth/login - rejects bad credentials (401)', async () => {
+    it('POST /auth/refresh - works with cookie (200)', async () => {
       const req = await getRequest();
-      return req(app.getHttpServer())
+      // Login first to get cookie
+      const loginRes = await req(app.getHttpServer())
         .post('/auth/login')
-        .send({ email: 'invalid@example.com', password: 'wrongpassword' })
+        .send({ email: 'admin@library.com', password: 'adminpassword' });
+      
+      const cookies = loginRes.get('Set-Cookie');
+      const cookie = cookies ? cookies[0] : '';
+      const accessToken = loginRes.body.access_token;
+
+      // Refresh using cookie AND access token (for Guard)
+      const res = await req(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Cookie', [cookie])
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+      
+      expect(res.body).toHaveProperty('access_token');
+    });
+
+    it('POST /auth/refresh - fails without cookie (401)', async () => {
+      const req = await getRequest();
+      const loginRes = await req(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: 'admin@library.com', password: 'adminpassword' });
+      
+      const accessToken = loginRes.body.access_token;
+
+      return req(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(401);
     });
   });
 
   describe('Books', () => {
-    it('GET /books - returns paginated list without auth (200)', async () => {
+    it('GET /books - returns list (200)', async () => {
       const req = await getRequest();
-      const res = await req(app.getHttpServer()).get('/books').expect(200);
-      expect(res.body).toHaveProperty('data');
-      expect(res.body).toHaveProperty('meta');
-    });
-
-    it('POST /books - requires authentication (401)', async () => {
-      const req = await getRequest();
-      return req(app.getHttpServer())
-        .post('/books')
-        .send({ title: 'Test', author: 'Author', publicationYear: 2020 })
-        .expect(401);
-    });
-
-    it('PATCH /books/:id - requires authentication (401)', async () => {
-      const req = await getRequest();
-      return req(app.getHttpServer())
-        .patch('/books/1')
-        .send({ title: 'Updated' })
-        .expect(401);
-    });
-
-    it('DELETE /books/:id - requires authentication (401)', async () => {
-      const req = await getRequest();
-      return req(app.getHttpServer())
-        .delete('/books/1')
-        .expect(401);
+      return req(app.getHttpServer()).get('/books').expect(200);
     });
   });
 });

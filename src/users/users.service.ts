@@ -12,4 +12,18 @@ export class UsersService {
   async create(data: any) {
     return this.prisma.user.create({ data });
   }
+
+  async findOneById(id: number) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async updateRefreshToken(userId: number, refreshToken: string | null, expiresAt: Date | null) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        refreshToken,
+        refreshTokenExpiresAt: expiresAt,
+      },
+    });
+  }
 }

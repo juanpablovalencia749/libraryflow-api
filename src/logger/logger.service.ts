@@ -20,4 +20,15 @@ export class LoggerService {
       },
     }).catch(e => this.logger.error('Failed to write audit log', e));
   }
+
+
+ async getLogs(limit = 50, offset = 0) {
+  return this.prisma.auditLog.findMany({
+    take: limit,
+    skip: offset,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}
 }

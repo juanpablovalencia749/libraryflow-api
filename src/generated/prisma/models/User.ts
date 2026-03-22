@@ -43,6 +43,8 @@ export type UserMinAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  refreshToken: string | null
+  refreshTokenExpiresAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -54,6 +56,8 @@ export type UserMaxAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  refreshToken: string | null
+  refreshTokenExpiresAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -65,6 +69,8 @@ export type UserCountAggregateOutputType = {
   isActive: number
   createdAt: number
   updatedAt: number
+  refreshToken: number
+  refreshTokenExpiresAt: number
   _all: number
 }
 
@@ -86,6 +92,8 @@ export type UserMinAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  refreshToken?: true
+  refreshTokenExpiresAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -97,6 +105,8 @@ export type UserMaxAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  refreshToken?: true
+  refreshTokenExpiresAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -108,6 +118,8 @@ export type UserCountAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  refreshToken?: true
+  refreshTokenExpiresAt?: true
   _all?: true
 }
 
@@ -206,6 +218,8 @@ export type UserGroupByOutputType = {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  refreshToken: string | null
+  refreshTokenExpiresAt: Date | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -240,6 +254,8 @@ export type UserWhereInput = {
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdBooks?: Prisma.BookListRelationFilter
   loans?: Prisma.LoanListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -255,6 +271,8 @@ export type UserOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBooks?: Prisma.BookOrderByRelationAggregateInput
   loans?: Prisma.LoanOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
@@ -273,6 +291,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdBooks?: Prisma.BookListRelationFilter
   loans?: Prisma.LoanListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -288,6 +308,8 @@ export type UserOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -307,6 +329,8 @@ export type UserScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  refreshToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  refreshTokenExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -317,6 +341,8 @@ export type UserCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -332,6 +358,8 @@ export type UserUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookUncheckedCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -346,6 +374,8 @@ export type UserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -361,6 +391,8 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUncheckedUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -375,6 +407,8 @@ export type UserCreateManyInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -385,6 +419,8 @@ export type UserUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -396,6 +432,8 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -407,6 +445,8 @@ export type UserCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
+  refreshTokenExpiresAt?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -422,6 +462,8 @@ export type UserMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
+  refreshTokenExpiresAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -433,6 +475,8 @@ export type UserMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
+  refreshTokenExpiresAt?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -459,6 +503,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -537,6 +589,8 @@ export type UserCreateWithoutCreatedBooksInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   loans?: Prisma.LoanCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -551,6 +605,8 @@ export type UserUncheckedCreateWithoutCreatedBooksInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -580,6 +636,8 @@ export type UserUpdateWithoutCreatedBooksInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   loans?: Prisma.LoanUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -594,6 +652,8 @@ export type UserUncheckedUpdateWithoutCreatedBooksInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   loans?: Prisma.LoanUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -607,6 +667,8 @@ export type UserCreateWithoutLoansInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookCreateNestedManyWithoutCreatedByInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -621,6 +683,8 @@ export type UserUncheckedCreateWithoutLoansInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookUncheckedCreateNestedManyWithoutCreatedByInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -650,6 +714,8 @@ export type UserUpdateWithoutLoansInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUpdateManyWithoutCreatedByNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -664,6 +730,8 @@ export type UserUncheckedUpdateWithoutLoansInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUncheckedUpdateManyWithoutCreatedByNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -677,6 +745,8 @@ export type UserCreateWithoutReservationsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -691,6 +761,8 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookUncheckedCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -720,6 +792,8 @@ export type UserUpdateWithoutReservationsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -734,6 +808,8 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUncheckedUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -747,6 +823,8 @@ export type UserCreateWithoutAuditLogsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -761,6 +839,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
   createdBooks?: Prisma.BookUncheckedCreateNestedManyWithoutCreatedByInput
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -790,6 +870,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -804,6 +886,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBooks?: Prisma.BookUncheckedUpdateManyWithoutCreatedByNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -876,6 +960,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  refreshToken?: boolean
+  refreshTokenExpiresAt?: boolean
   createdBooks?: boolean | Prisma.User$createdBooksArgs<ExtArgs>
   loans?: boolean | Prisma.User$loansArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
@@ -894,9 +980,11 @@ export type UserSelectScalar = {
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  refreshToken?: boolean
+  refreshTokenExpiresAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "isActive" | "createdAt" | "updatedAt" | "refreshToken" | "refreshTokenExpiresAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBooks?: boolean | Prisma.User$createdBooksArgs<ExtArgs>
   loans?: boolean | Prisma.User$loansArgs<ExtArgs>
@@ -922,6 +1010,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    refreshToken: string | null
+    refreshTokenExpiresAt: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1303,6 +1393,8 @@ export interface UserFieldRefs {
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly refreshToken: Prisma.FieldRef<"User", 'String'>
+  readonly refreshTokenExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
