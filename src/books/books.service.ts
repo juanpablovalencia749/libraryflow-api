@@ -169,11 +169,11 @@ export class BooksService {
       throw new NotFoundException('Book not found');
     }
 
-    if (updateBookDto.status === 'LOANED') {
-      throw new BadRequestException(
-        'Book status LOANED is managed by the loan flow, not by manual update',
-      );
-    }
+    // if (updateBookDto.status === 'LOANED') {
+    //   throw new BadRequestException(
+    //     'Book status LOANED is managed by the loan flow, not by manual update',
+    //   );
+    // }
 
     return this.prisma.book.update({
       where: { id },

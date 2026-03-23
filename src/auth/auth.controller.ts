@@ -1,9 +1,10 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Res, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post,Get, Body, HttpCode, HttpStatus, Res, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service.js';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
+import { JwtAuthGuard } from './jwt-auth.guard.js'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -43,6 +44,21 @@ export class AuthController {
     });
 
     return { access_token: tokens.access_token };
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get authenticated user data' })
+  @ApiResponse({ status: 200, description: 'Returns current user.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  async me(@Req() request: Request) {
+    const authUser = request.user as { userId: number };
+
+    if (!authUser?.userId) {
+      throw new UnauthorizedException('Invalid token payload');
+    }
+
+    return this.authService.me(authUser.userId);
   }
 
   @Post('refresh')

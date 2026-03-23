@@ -53,6 +53,16 @@ export class AuthService {
     };
   }
 
+    async me(userId: number) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const { passwordHash, refreshToken, ...result } = user as any;
+    return result;
+  }
+
   async refreshTokens(userId: number, refreshToken: string) {
     const user = await this.usersService.findOneById(userId) as any;
     if (!user || !user.refreshToken || !user.refreshTokenExpiresAt) {
