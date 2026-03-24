@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { PrismaMssql } from "@prisma/adapter-mssql";
 import { PrismaClient } from "../src/generated/prisma/client.js";
-import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient({
   adapter: new PrismaMssql({
@@ -90,53 +89,21 @@ const seedBooks = [
 ];
 
 async function main() {
-  console.log("Seeding database...");
-
-  const users: any[] = [];
-
-  for (let i = 0; i < 5; i++) {
-    const user = await prisma.user.create({
-      data: {
-        name: faker.person.fullName(),
-        email: faker.internet.email().toLowerCase(),
-        passwordHash: faker.internet.password(),
-        role: i % 2 === 0 ? "USER" : "ADMIN",
-        isActive: true,
-      },
-    });
-
-    users.push(user);
-  }
-
-  const books: any[] = [];
+  console.log("Seeding books...");
 
   for (const bookData of seedBooks) {
-    const book = await prisma.book.create({
+    await prisma.book.create({
       data: {
         title: bookData.title,
         author: bookData.author,
         publicationYear: bookData.publicationYear,
         status: "AVAILABLE",
         imageUrl: coverUrl(bookData.isbn),
-        createdById:
-          users[faker.number.int({ min: 0, max: users.length - 1 })].id,
-      },
-    });
-
-    books.push(book);
-  }
-
-  for (let i = 0; i < 5; i++) {
-    await prisma.loan.create({
-      data: {
-        bookId: books[faker.number.int({ min: 0, max: books.length - 1 })].id,
-        userId: users[faker.number.int({ min: 0, max: users.length - 1 })].id,
-        status: "ACTIVE",
       },
     });
   }
 
-  console.log("Seeding completed!");
+  console.log("Book seeding completed!");
 }
 
 main()
